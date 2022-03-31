@@ -1,29 +1,128 @@
 const express = require('express')
 const app = express();
-require('dotenv').config();
+var jwt = require('express-jwt');
+var jwks = require('jwks-rsa');
+const http = require('http').createServer(app);
+const io = require('socket.io')(http, {
+    cors: {
+        origin:"*",
+        methods:["GET","POST"]
+    }
+});
+const mongoose = require('mongoose');
+ 
+require ('dotenv').config();
 
-const {auth,requiresAuth} = require('express-openid-connect');
-const res = require('express/lib/response');
-app.use(
-    auth({
-        authRequired: false,
-        auth0Logout: true,
-        issuerBaseURL:process.env.ISSUER_BASE_URL,
-        baseURL:process.env.BASE_URL,
-        clientID: process.env.CLIENT_ID,
-        secret: process.env.SECRET,
-    })
-)
+
+const Message =require('./model/message');
+const User = require('./model/user');
+
+
+var jwtCheck = jwt({
+    secret: jwks.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: 'https://dev-gy1a3e07.us.auth0.com/.well-known/jwks.json'
+  }),
+  audience: 'https://dev-gy1a3e07.us.auth0.com/api/v2/',
+  issuer: 'https://dev-gy1a3e07.us.auth0.com/',
+  algorithms: ['RS256']
+});
+
+ app.use(jwtCheck);
+
+
+app.use(express.static('public'));
+
+const cors = require('cors');
+const corsOptions ={
+    origin:'*', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
+
+var messageRoutes = require("./routes/messageRoutes");
+app.use(messageRoutes);
+
+var userRoutes = require("./routes/userRoutes");
+app.use(userRoutes);
+
+var conversationRoutes = require("./routes/conversationRoutes");
+app.use(conversationRoutes);
+
 
 app.get('/', (req,res) => {
     res.send(req.oidc.isAuthenticated() ? "Logged In" : "Logged Out")
 })
 
-app.get('/profile', requiresAuth(), (req,res) => {
+app.get('/profile',  (req,res) => {
     res.send(JSON.stringify(req.oidc.user))
 })
 
-const port = process.env.PORT || 3000;
-app.listen(port, ()=> {
-    console.log("listening on port: "+ port)
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.j3fag.mongodb.net/instantmessage?retryWrites=true&w=majority`; 
+mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
+.then((result) => 
+{
+     console.log('connected to db'); 
+     http.listen(process.env.PORT || 3000);
+})
+ .catch((err) => console.log(err));
+
+ io.on('connection', socket => 
+ {
+    console.log("connected with id of: " +socket.id);
+    // socket.emit("room-joined",{message:"you joined the room: " + socket.id})
+
+    socket.on('send-message', (message,room,sender) =>
+    {
+        io.to(room).emit('message-received');
+        console.log("the message received says: " + message);
+        // io.to(room).emit("message-confirmation",{confimationMessage:"server received message. Message said: " + message});
+
+        console.log("sent message:" + message + " to room : " + room);
+        //save message into mongodb
+        const savedMessage = new Message({
+            body:message,
+            sender:sender,
+            conversationId:room  
+        });
+    
+        savedMessage.save()
+            .then((result) => {
+                io.to(socket.id).emit("message-saved",result )
+                io.to(socket.id).emit("message-received",result)
+            })
+            .catch((err) => 
+            console.log(err));
+
+
+
+    })
+    socket.on('disconnect', ()=> {
+        console.log("client disconnected")
+    });
+
+        socket.on('join-room', (room)=>{
+         if(room.room !== "")
+         {
+         socket.join(room);
+         console.log(socket.id + "just joined room :" +room.room)
+        //  io.to(room).emit('room-joined',{message: "you just jointed the room:" + room.room})
+         }})
+        
+    
+
+        socket.on('leave-room', (room) =>{
+         if(room.room!=="")
+         {
+         socket.leave(room);
+         console.log(socket.id + "Just left room: " + room.room);
+         }
+        
+         //socket.emit('left-room',{message:"you just left the room:" + room.room});
+         })
+
+
 })
