@@ -23,10 +23,10 @@ var jwtCheck = jwt({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: 'https://dev-gy1a3e07.us.auth0.com/.well-known/jwks.json'
+        jwksUri: process.env.JWKSURI
   }),
-  audience: 'https://dev-gy1a3e07.us.auth0.com/api/v2/',
-  issuer: 'https://dev-gy1a3e07.us.auth0.com/',
+  audience: process.env.AUDIENCE,
+  issuer: process.env.ISSUER,
   algorithms: ['RS256']
 });
 
