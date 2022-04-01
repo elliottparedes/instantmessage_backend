@@ -112,7 +112,11 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
         //  io.to(room).emit('room-joined',{message: "you just jointed the room:" + room.room})
          }})
         
-    
+         socket.on('notify-participants', (participants) =>{
+            //  io.to(participants.participants[0])
+            console.log("setn a notification to " +participants.participants[1] +"for them to refresh their conversation list");
+            io.to(participants.participants[1]).emit('refresh-conversations');
+         })
 
         socket.on('leave-room', (room) =>{
          if(room.room!=="")

@@ -21,7 +21,7 @@ route.post('/createConversation', jsonParser, (req,res) => {
     });
 
     conversation.save()
-        .then((result) => {
+        .then((result) => {~
             res.send(result);
             console.log(result);
         })
