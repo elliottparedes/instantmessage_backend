@@ -115,6 +115,7 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
          socket.on('notify-participants', (participants) =>{
             //  io.to(participants.participants[0])
             console.log("setn a notification to " +participants.participants[1] +"for them to refresh their conversation list");
+            io.to(participants.participants[0]).emit('refresh-conversations');
             io.to(participants.participants[1]).emit('refresh-conversations');
          })
 
