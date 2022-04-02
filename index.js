@@ -117,7 +117,7 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
             console.log("setn a notification to " +participants.participants[1] +"for them to refresh their conversation list");
             io.to(participants.participants[0]).emit('refresh-conversations');
             io.to(participants.participants[1]).emit('refresh-conversations');
-            console.log("setn a notification to " +participants.participants[1] +"for them to refresh their conversation list");
+            console.log("setn a notification to " +participants.participants[0] +"for them to refresh their conversation list");
          })
 
         socket.on('leave-room', (room) =>{
