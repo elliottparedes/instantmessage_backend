@@ -94,7 +94,7 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
             .then((result) => {
                 // io.to(socket.id).emit("message-saved",result )
                 // io.to(socket.id).emit("message-received",result)
-                io.to(room).emit("message-received",result);
+                io.in(room).emit("message-received",result);
             })
             .catch((err) => 
             console.log(err));
