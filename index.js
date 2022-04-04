@@ -114,13 +114,13 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
         //  io.to(room).emit('room-joined',{message: "you just jointed the room:" + room.room})
          }})
 
-         socket.on('getConversations',async ()=>{
+         socket.on('getConversations',async (user)=>{
 
             let responseArray = [];
 
             try{
         
-                    await Conversation.find({participants:req.body.participant}, (err,docs)=>{
+                    await Conversation.find({participants:user}, (err,docs)=>{
                   
                     responseArray = docs;
                    
