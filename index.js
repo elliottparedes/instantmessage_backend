@@ -125,10 +125,10 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
                     responseArray = docs;
                    
                    
-                    }).clone().then(()=>{
+                    }).then(()=>{
                           io.in(socket.id).emit('conversations',{conversationArray:responseArray});
                             console.log("getConversations was pinged and the response was:" + responseArray);
-                    })
+                    }).clone()
         
         
             }catch (err) {
