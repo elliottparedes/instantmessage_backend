@@ -117,7 +117,8 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
             console.log("setn a notification to " +participants.participants[1] +"for them to refresh their conversation list");
             // io.in(participants.participants[0]).emit("refresh-conversations");
             // io.in(participants.participants[1]).emit("refresh-conversations");
-            io.in("elliottparedes").emit("refresh-conversations");
+            // io.in("elliottparedes").emit("refresh-conversations");
+            io.emit("refresh-conversations");
             console.log("setn a notification to " +participants.participants[0] +"for them to refresh their conversation list");
          })
 
