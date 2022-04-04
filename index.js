@@ -137,8 +137,23 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
             }
 
            
-         })
+         });
         
+         socket.on("getMessages", async(data)=>{
+                let responseArray=[]
+                try {
+                    await Message.find({conversationId:ObjectId(data.id)}, (err,docs)=>{
+                           
+                        responseArray = docs;
+                        io.in(socket.id).emit('messages',{messageArray:responseArray});
+                        console.log("getMessages was pinged and the response was:" + responseArray);
+                        }).clone()
+                }catch(err)
+                {
+                    console.log(err);
+                }
+         })
+
          socket.on('notify-participants', (participants) =>{
             //  io.to(participants.participants[0])
             console.log("setn a notification to " +participants.participants[1] +"for them to refresh their conversation list");
