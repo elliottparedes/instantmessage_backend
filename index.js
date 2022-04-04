@@ -123,7 +123,7 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
             console.log("setn a notification to " +participants.participants[0] +"for them to refresh their conversation list");
          })
 
-         socket.on('delete-conversation', (data) => {
+         socket.on('delete-conversation', async(data) => {
             try{
                 await Conversation.deleteOne({_id:data.id})
                 console.log("deleted conversation with id:" + data.id)
