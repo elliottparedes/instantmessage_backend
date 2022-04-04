@@ -115,8 +115,8 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
          }})
 
          socket.on('getConversations', ()=>{
-             io.to(socket.id).emit('conversations',{conversation:"sammy"});
-             console.log("getConversatiosn was pinged" + conversation)
+             io.emit('conversations',{conversation:"sammy"});
+             console.log("getConversations was pinged" + conversation)
          })
         
          socket.on('notify-participants', (participants) =>{
