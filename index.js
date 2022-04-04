@@ -141,6 +141,7 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
         
          socket.on("getMessages", async(data)=>{
                 let responseArray=[]
+                if(data.id !=="" && data.id!==undefined)
                 try {
                     await Message.find({conversationId:ObjectId(data.id)}, (err,docs)=>{
                            
