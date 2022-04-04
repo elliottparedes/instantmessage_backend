@@ -113,6 +113,10 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
          console.log(socket.id + "just joined room :" +room.room)
         //  io.to(room).emit('room-joined',{message: "you just jointed the room:" + room.room})
          }})
+
+         socket.on('getConversations', ()=>{
+             io.to(socket.id).emit('conversations',{conversation:"sammy"});
+         })
         
          socket.on('notify-participants', (participants) =>{
             //  io.to(participants.participants[0])
