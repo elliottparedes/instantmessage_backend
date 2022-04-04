@@ -114,9 +114,29 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
         //  io.to(room).emit('room-joined',{message: "you just jointed the room:" + room.room})
          }})
 
-         socket.on('getConversations', ()=>{
-             io.in(socket.id).emit('conversations',{conversation:"sammy"});
-             console.log("getConversations was pinged")
+         socket.on('getConversations',async ()=>{
+
+            let responseArray = [];
+
+            try{
+        
+                    await Conversation.find({participants:req.body.participant}, (err,docs)=>{
+                  
+                    responseArray = docs;
+                   
+                   
+                    }).then(()=>{
+                          io.in(socket.id).emit('conversations',{conversationArray:responseArray});
+                            console.log("getConversations was pinged and the response was:" + responseArray);
+                    })
+        
+        
+            }catch (err) {
+                console.log('error', err)
+                
+            }
+
+           
          })
         
          socket.on('notify-participants', (participants) =>{
