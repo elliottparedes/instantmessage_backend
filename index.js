@@ -117,10 +117,10 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
          socket.on('getConversations',async (user)=>{
 
             let responseArray = [];
-                const conversation = new Conversation()
+                
             try{
 
-                    await conversation.find({participants:user.user}, (err,docs)=>{
+                    await Conversation.find({participants:user.user}, (err,docs)=>{
                   
                     responseArray = docs;
                    
