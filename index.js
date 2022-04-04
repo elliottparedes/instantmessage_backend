@@ -78,7 +78,7 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
 
     socket.on('send-message', (message,room,sender) =>
     {
-        io.to(room).emit('message-received');
+        // io.to(room).emit('message-received');
         console.log("the message received says: " + message);
         // io.to(room).emit("message-confirmation",{confimationMessage:"server received message. Message said: " + message});
 
@@ -92,8 +92,9 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
     
         savedMessage.save()
             .then((result) => {
-                io.to(socket.id).emit("message-saved",result )
-                io.to(socket.id).emit("message-received",result)
+                // io.to(socket.id).emit("message-saved",result )
+                // io.to(socket.id).emit("message-received",result)
+                io.to(room).emit("message-received",result);
             })
             .catch((err) => 
             console.log(err));
