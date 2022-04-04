@@ -16,6 +16,7 @@ require ('dotenv').config();
 
 const Message =require('./model/message');
 const User = require('./model/user');
+const Conversation = require('./model/conversation');
 
 
 var jwtCheck = jwt({
@@ -120,6 +121,16 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
             // io.in("elliottparedes").emit("refresh-conversations");
             // io.emit("refresh-conversations");
             console.log("setn a notification to " +participants.participants[0] +"for them to refresh their conversation list");
+         })
+
+         socket.on('delete-conversation', (data) => {
+            try{
+                await Conversation.deleteOne({_id:data.id})
+                console.log("deleted conversation with id:" + data.id)
+            }catch(e)
+            {
+                console.log("there was an issue deleting this conversation : " + e)
+            }
          })
 
         socket.on('leave-room', (room) =>{
