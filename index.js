@@ -123,12 +123,12 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
                     await Conversation.find({participants:user.user}, (err,docs)=>{
                   
                     responseArray = docs;
-                   
-                   
-                    }).then(()=>{
-                          io.in(socket.id).emit('conversations',{conversationArray:responseArray});
+                   io.in(socket.id).emit('conversations',{conversationArray:responseArray});
                             console.log("getConversations was pinged and the response was:" + responseArray);
-                    })
+                   
+                    }).clone();
+                          
+                    
         
         
             }catch (err) {
