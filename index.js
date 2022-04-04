@@ -107,7 +107,7 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
         socket.on('join-room', (room)=>{
          if(room.room !== "")
          {
-         socket.join(room);
+         socket.join(room.room);
          console.log(socket.id + "just joined room :" +room.room)
         //  io.to(room).emit('room-joined',{message: "you just jointed the room:" + room.room})
          }})
@@ -115,10 +115,10 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
          socket.on('notify-participants', (participants) =>{
             //  io.to(participants.participants[0])
             console.log("setn a notification to " +participants.participants[1] +"for them to refresh their conversation list");
-            // io.in(participants.participants[0]).emit("refresh-conversations");
-            // io.in(participants.participants[1]).emit("refresh-conversations");
+             io.in(participants.participants[0]).emit("refresh-conversations");
+             io.in(participants.participants[1]).emit("refresh-conversations");
             // io.in("elliottparedes").emit("refresh-conversations");
-            io.emit("refresh-conversations");
+            // io.emit("refresh-conversations");
             console.log("setn a notification to " +participants.participants[0] +"for them to refresh their conversation list");
          })
 
