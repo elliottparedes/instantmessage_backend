@@ -125,10 +125,12 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
 
          socket.on('delete-conversation', async(data) => {
             try{
-                await Conversation.deleteOne({_id:data.data})
-                console.log("deleted conversation with id:" + data.data)
+                await Conversation.deleteOne({_id:data.data}).then(()=>{
+                   console.log("deleted conversation with id:" + data.data)
                 io.in(data.data).emit("refresh-conversations");
-                socket.leave(data.data);
+                socket.leave(data.data); 
+                })
+                
             }catch(e)
             {
                 console.log("there was an issue deleting this conversation : " + e)
