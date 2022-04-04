@@ -117,10 +117,10 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
          socket.on('getConversations',async (user)=>{
 
             let responseArray = [];
-
+                const conversation = new Conversation()
             try{
-        
-                    await Conversation.find({participants:user.user}, (err,docs)=>{
+
+                    await conversation.find({participants:user.user}, (err,docs)=>{
                   
                     responseArray = docs;
                    
@@ -128,7 +128,7 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
                     }).then(()=>{
                           io.in(socket.id).emit('conversations',{conversationArray:responseArray});
                             console.log("getConversations was pinged and the response was:" + responseArray);
-                    }).clone()
+                    })
         
         
             }catch (err) {
