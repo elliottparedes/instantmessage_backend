@@ -31,7 +31,7 @@ var jwtCheck = jwt({
   algorithms: ['RS256']
 });
 
-//   app.use(jwtCheck);
+  app.use(jwtCheck);
 
 
 app.use(express.static('public'));
