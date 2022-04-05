@@ -24,10 +24,10 @@ var jwtCheck = jwt({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: "https://dev-gy1a3e07.us.auth0.com/.well-known/jwks.json"
+        jwksUri: 'https://dev-gy1a3e07.us.auth0.com/.well-known/jwks.json'
   }),
-    audience: "https://instantmessengerbackend.herokuapp.com/",
-  issuer: "https://dev-gy1a3e07.us.auth0.com/",
+    audience: 'https://instantmessengerbackend.herokuapp.com/',
+  issuer: 'https://dev-gy1a3e07.us.auth0.com/',
   algorithms: ['RS256']
 });
 
