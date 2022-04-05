@@ -26,12 +26,12 @@ var jwtCheck = jwt({
         jwksRequestsPerMinute: 5,
         jwksUri: "https://dev-gy1a3e07.us.auth0.com/.well-known/jwks.json"
   }),
-    
+    audience: "https://instantmessengerbackend.herokuapp.com/",
   issuer: "https://dev-gy1a3e07.us.auth0.com/",
   algorithms: ['RS256']
 });
 
-//   app.use(jwtCheck);
+  app.use(jwtCheck);
 
 
 app.use(express.static('public'));
