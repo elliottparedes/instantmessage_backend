@@ -170,8 +170,9 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
                 await Conversation.deleteOne({_id:data.data},(err,result)=>{
                      console.log("deleted conversation with id:" + data.data)
                      io.in(data.data).emit("refresh-conversations");
-                     io.in(data.data).emit("messages", {messageArray:[]}) // trying to get blank messages after delete. 
-                        socket.leave(data.data); 
+                     io.in(socket.id).emit("messages", {messageArray:[]}) // trying to get blank messages after delete. 
+                     io.in(socket.id).emit("clearname");   
+                     socket.leave(data.data); 
                 })
                 
             }catch(e)
