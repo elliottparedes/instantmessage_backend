@@ -24,7 +24,7 @@ var jwtCheck = jwt({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: 'https://dev-gy1a3e07.us.auth0.com/.well-known/jwks.json'
+        jwksUri: process.env.JWKSURI
   }),
     audience: 'https://instantmessengerbackend.herokuapp.com/',
   issuer: 'https://dev-gy1a3e07.us.auth0.com/',
@@ -127,10 +127,7 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
                             console.log("getConversations was pinged and the response was:" + responseArray);
                    
                     }).clone();
-                          
-                    
-        
-        
+                        
             }catch (err) {
                 console.log('error', err)
                 
