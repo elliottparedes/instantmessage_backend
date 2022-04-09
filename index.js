@@ -5,7 +5,7 @@ var jwks = require('jwks-rsa');
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
     cors: {
-        origin:"*",
+        origin:process.env.ORIGIN,
         methods:["GET","POST"]
     }
 });
