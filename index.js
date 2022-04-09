@@ -26,7 +26,7 @@ var jwtCheck = jwt({
         jwksRequestsPerMinute: 5,
         jwksUri: process.env.JWKSURI
   }),
-    audience: 'https://instantmessengerbackend.herokuapp.com/',
+    audience: process.env.AUDIENCE,
   issuer: 'https://dev-gy1a3e07.us.auth0.com/',
   algorithms: ['RS256']
 });
