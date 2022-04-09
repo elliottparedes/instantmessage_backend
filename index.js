@@ -27,7 +27,7 @@ var jwtCheck = jwt({
         jwksUri: process.env.JWKSURI
   }),
     audience: process.env.AUDIENCE,
-  issuer: 'https://dev-gy1a3e07.us.auth0.com/',
+  issuer: process.env.ISSUER,
   algorithms: ['RS256']
 });
 
