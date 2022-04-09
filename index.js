@@ -38,7 +38,7 @@ app.use(express.static('public'));
 
 const cors = require('cors');
 const corsOptions ={
-    origin:'*', 
+    origin: process.env.ORIGIN, 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
