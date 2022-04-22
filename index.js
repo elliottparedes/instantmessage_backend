@@ -97,11 +97,11 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
 
 
     })
-    socket.on('create-conversation', (participants) =>{
+    socket.on('create-conversation', (data) =>{
 
-        console.log("this is the data the back end receieved from create-conversation" +participants)
+        console.log("this is the data the back end receieved from create-conversation" +data.participants)
         const conversation = new Conversation({
-            participants: participants       
+            participants: data.participants       
         });
     
         conversation.save()
