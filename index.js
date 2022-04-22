@@ -105,8 +105,10 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
         });
     
         conversation.save()
-            .then((result) => {~
+            .then((result) => {
                 console.log(result);
+                io.in(data.participants[0]).emit("refresh-conversations");
+             io.in(data.participants[1]).emit("refresh-conversations");
             })
             .catch((err) => 
             console.log(err));
