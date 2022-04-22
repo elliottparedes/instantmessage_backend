@@ -74,16 +74,13 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
  io.on('connection', socket => 
  {
     console.log("connected with id of: " +socket.id);
-    // socket.emit("room-joined",{message:"you joined the room: " + socket.id})
 
     socket.on('send-message', (message,room,sender) =>
     {
-        // io.to(room).emit('message-received');
         console.log("the message received says: " + message);
-        // io.to(room).emit("message-confirmation",{confimationMessage:"server received message. Message said: " + message});
 
         console.log("sent message:" + message + " to room : " + room);
-        //save message into mongodb
+        
         const savedMessage = new Message({
             body:message,
             sender:sender,
@@ -92,8 +89,6 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
     
         savedMessage.save()
             .then((result) => {
-                // io.to(socket.id).emit("message-saved",result )
-                // io.to(socket.id).emit("message-received",result)
                 io.in(room).emit("message-received",result);
             })
             .catch((err) => 
@@ -102,11 +97,27 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
 
 
     })
+    socket.on('create-conversation', (participants) =>{
+
+        console.log("this is the data the back end receieved from create-conversation" +participants)
+        const conversation = new Conversation({
+            participants: participants       
+        });
+    
+        conversation.save()
+            .then((result) => {~
+                console.log(result);
+            })
+            .catch((err) => 
+            console.log(err));
+
+    })
+
     socket.on('disconnect', ()=> {
         console.log("client disconnected")
     });
 
-        socket.on('join-room', (room)=>{
+    socket.on('join-room', (room)=>{
          if(room.room !== "")
          {
          socket.join(room.room);
@@ -114,7 +125,7 @@ mongoose.connect(uri,{useNewUrlParser: true, useUnifiedTopology:true})
         //  io.to(room).emit('room-joined',{message: "you just jointed the room:" + room.room})
          }})
 
-         socket.on('getConversations',async (user)=>{
+    socket.on('getConversations',async (user)=>{
 
             let responseArray = [];
                 
